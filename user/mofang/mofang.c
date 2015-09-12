@@ -108,7 +108,7 @@ void allleft90()               /* 整体逆时针90  */
 	Delayms(2000);
 	REG_Write(2,0,number[0][_high]);
 	REG_Write(6,0,number[2][_high]);
-	
+	Action();
 	Delayms(2000);
 }
 void allright90()              /* 整体顺时针90  */
@@ -213,7 +213,6 @@ void end()
 	ClockWise(3,0,number[1][med]);
 	ClockWise(5,0,number[2][med]);
 	ClockWise(7,0,number[3][med]);
-	Action();
 }
 void U()
 {
