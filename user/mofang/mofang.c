@@ -320,3 +320,43 @@ void Retn()
 	REG_Write(8,0,number[3][_high]);
 	Action();
 }
+void Optimization(char *step)
+{
+	int i = 0,n=0;
+	while (step[n] != 0)
+	{
+		n++;
+		if (step[n] / 10 == 1)
+		{
+			i = n;
+			while (step[i] != 0)
+			{
+				i++;
+				switch (step[i] / 10)
+				{
+				case 1:step[i] += 20; break;
+				case 2:step[i] += 20; break;
+				case 3:step[i] -= 10; break;
+				case 4:step[i] -= 30; break;
+				default:break;
+				}
+			}
+		}
+		if (step[n] / 10 == 2)
+		{
+			i = n;
+			while (step[i] != 0)
+			{
+				i++;
+				switch (step[i] / 10)
+				{
+				case 1:step[i] += 20; break;
+				case 2:step[i] += 20; break;
+				case 3:step[i] -= 10; break;
+				case 4:step[i] -= 30; break;
+				default:break;
+				}
+			}
+		}
+	}
+}

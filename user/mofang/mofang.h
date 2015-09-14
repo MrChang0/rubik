@@ -39,6 +39,7 @@ void L(void);
 void R(void);
 void B(void);
 void Retn(void);
+void Optimization(char *step);
 
 
 #define U1() left90(3)
@@ -57,13 +58,13 @@ void Retn(void);
 #define D3() right90(1);
 #define D2() turn180(1);
 
-#define F1() allright90();Delayms(2000);R1();Delayms(2000);allleft90();
-#define F2() allright90();Delayms(2000);R2();Delayms(2000);allleft90();
-#define F3() allright90();Delayms(2000);R3();Delayms(2000);allleft90();
+#define F1() allright90();Delayms(2000);R1();Delayms(2000);
+#define F2() allright90();Delayms(2000);R2();Delayms(2000);
+#define F3() allright90();Delayms(2000);R3();Delayms(2000);
 
-#define B1() allright90();Delayms(2000);L1();Delayms(2000);allleft90();
-#define B2() allright90();Delayms(2000);L2();Delayms(2000);allleft90();
-#define B3() allright90();Delayms(2000);L3();Delayms(2000);allleft90();
+#define B1() allright90();Delayms(2000);L1();Delayms(2000);
+#define B2() allright90();Delayms(2000);L2();Delayms(2000);
+#define B3() allright90();Delayms(2000);L3();Delayms(2000);
 
 
 

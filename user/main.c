@@ -77,6 +77,7 @@ int main(void)
 			if(page/2==9)
 			{
 				Rubik(rubik,step);
+				Optimization(step);
 				rubikStep(step);
 				end();
 				page=0;
