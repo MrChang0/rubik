@@ -30,7 +30,6 @@ void turn180(uint8_t ID);
 void allleft90(void);
 void allright90(void);
 void all180(void);
-void rubikStep(char *step);
 void start(void);
 void end(void);
 void U(void);
@@ -39,10 +38,12 @@ void L(void);
 void R(void);
 void B(void);
 void Retn(void);
+void Correction(void);
 void Optimization(char *step);
+void rubikStep(char *step);
+void ChangeStep(char *step);
 
-
-#define U1() left90(3)
+#define U1() left90(3);
 #define U3() right90(3);
 #define U2() turn180(3);
 
@@ -58,13 +59,13 @@ void Optimization(char *step);
 #define D3() right90(1);
 #define D2() turn180(1);
 
-#define F1() allright90();Delayms(2000);R1();Delayms(2000);
-#define F2() allright90();Delayms(2000);R2();Delayms(2000);
-#define F3() allright90();Delayms(2000);R3();Delayms(2000);
+#define F1() allright90();R1();
+#define F2() allright90();R2();
+#define F3() allright90();R3();
 
-#define B1() allright90();Delayms(2000);L1();Delayms(2000);
-#define B2() allright90();Delayms(2000);L2();Delayms(2000);
-#define B3() allright90();Delayms(2000);L3();Delayms(2000);
+#define B1() allright90();L1();
+#define B2() allright90();L2();
+#define B3() allright90();L3();
 
 
 

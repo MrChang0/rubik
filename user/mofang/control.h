@@ -12,6 +12,9 @@ void Action(void);
 void DuoJi(uint8_t ID);
 void DianJi(uint8_t ID);
 void speedtest(uint8_t ID,uint8_t ch,uint16_t speed);
+void RetnMode(uint8_t ID,u8 Mode);
 void Delayus(uint32_t time);
-
+u8 read_current_location(uint16_t ID,u8 address);
+u16 read_location(u8 ID);
+u8 JudgeToGO(u8 ID,u16 Angle);
 #endif

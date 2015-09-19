@@ -1,75 +1,115 @@
-#include "usart.h"
+#include"USART1.h"
 
-uint16_t buf[240][320];
 
-void USART1_Config()
+u8 sh[15]={0};																																//存放当前位置低位数据
+u8 xh[15]={0};																																//存放当前位置高位数据
+
+void USART1_Config(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+	USART_InitTypeDef USART_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+	 
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1|RCC_APB2Periph_GPIOA,ENABLE);
+	
+	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
+	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_9;
+	GPIO_Init(GPIOA,&GPIO_InitStructure);
+	
+
+	USART_InitStructure.USART_BaudRate=19230;
+	USART_InitStructure.USART_WordLength=USART_WordLength_8b;
+	USART_InitStructure.USART_StopBits=1;
+	USART_InitStructure.USART_Parity=USART_Parity_No;
+	USART_InitStructure.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
+	USART_InitStructure.USART_Mode=USART_Mode_Tx|USART_Mode_Rx;
+	USART_Init(USART1,&USART_InitStructure);
+	
+																																							//Usart1 NVIC 配置
+  NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;										//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;													//子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;															//IRQ通道使能
+	NVIC_Init(&NVIC_InitStructure);	
+   
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);															//开启接受中断  由于是半双工只接tx一根线 所以每次发数据都会触发接收中断 不过如果有指令返回会被接收到
+
+  USART_Cmd(USART1, ENABLE);                    															//使能串口 
+	
+	USART_HalfDuplexCmd(USART1, ENABLE);																				//半双工模式
+	
+}
+
+void USART1_IRQHandler(void)                																	//串口1中断服务程序
+{
+	static u8 ch[50]={0};
+	static u8 i=0;	
+	u8 k=0,j=0;
+//	u8 sh_24=0,sh_25=0;
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  											//接收中断
+	{
+			ch[i] =USART_ReceiveData(USART1);	
+			i++;
+			if(i>=49)
+			{	
+				for(i=0;i<50;i++)
+				{
+						if(ch[i]==0xff && ch[i+1]==0xff && ch[i+3]==0x04 && ch[i+8]==0xff && ch[i+9]==0xff )	
+						{
+								if(ch[i+5]==0x24)
+								{
+									
+										for(k=0;k<15;k++)
+										{
+											sh[j]=ch[i];																										//把数据放到sh里
+											j++;
+											i++;
+										}
+								}
+								if(ch[i+5]==0x25)
+								{
+										for(k=0;k<15;k++)
+										{
+											xh[j]=ch[i];																										//把数据放到sh里
+											j++;
+											i++;
+										}	
+								}
+							}
+				}
+				i=0;
+			}	
+  } 
+}
+u8 Receiving(u8 num)																														//不知道循序会不会乱 
+{
+	u8 data=0;
+	if(num==0)																			//理想的数据：  0xff 0xff 0x00 0x04 0x00 参数1  参数2  校验 
+	{	
+			data=sh[13];//|(u16)(sh[6]<<8);																							//参数1和参数2合并成16位
+	}
+	else if(num==1)
+	{
+			data=xh[13];
+	}
+	return data;
+}
+
+void Send(uint8_t Data)
+{
+	
+	
+	USART_SendData(USART1,Data);
+	
+	while(USART_GetFlagStatus(USART1,USART_FLAG_TC) == RESET);
+}
+
+
+void RECEIVE_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
-	USART_InitTypeDef USART_InitStructure;
-	
-	RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA,ENABLE);
-	
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_9;
-	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
-	
-	GPIO_Init(GPIOA,&GPIO_InitStructure);
-	
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IN_FLOATING;
-	
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_9;
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
-	
-	USART_InitStructure.USART_BaudRate=115200;
-	USART_InitStructure.USART_WordLength=USART_WordLength_8b;
-	USART_InitStructure.USART_StopBits=USART_StopBits_1;
-	USART_InitStructure.USART_Parity=USART_Parity_No;
-	USART_InitStructure.USART_Mode=USART_Mode_Rx | USART_Mode_Tx;
-	USART_InitStructure.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
-	
-	USART_Init(USART1,&USART_InitStructure);
-	USART_Cmd(USART1,ENABLE);
-}
-
-void DMA_Config()
-{
-	DMA_InitTypeDef DMA_InitStructure;
-	
-	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,ENABLE);
-	
-	DMA_InitStructure.DMA_PeripheralBaseAddr = USART_DR_BASE;
-	
-	DMA_InitStructure.DMA_MemoryBaseAddr = (u32)buf;
-	
-	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
-	
-	DMA_InitStructure.DMA_BufferSize = 320*240*2;
-	
-	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-	
-	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-	
-	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
-	
-	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
-	
-	DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
-	
-	DMA_InitStructure.DMA_Priority = DMA_Priority_Medium;
-	
-	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
-	
-	DMA_Init(DMA1_Channel4,&DMA_InitStructure);
-	
-	DMA_Cmd(DMA1_Channel4,ENABLE);
-	
-}
-
-int fputc(int ch,FILE *f)
-{
-	USART_SendData(USART1,(unsigned int)ch);
-	
-	while(USART_GetFlagStatus(USART1,USART_FLAG_TC)== RESET);
-	
-	return(ch);
 }

@@ -26,8 +26,22 @@ void Reset_Config(uint8_t ID)                   /*   ¸´Î»Ò»¸ö¶æ»ú ´Óµç»úÄ£Ê½ºóÒª
   RECEIVE_Config();
 	
 	Delayus(10000);
-}	
+}
+void RetnMode(uint8_t ID,u8 Mode)
+{
+	USART1_Config();
 	
+	Delayus(10000);
+	Send(0xFF);
+	Send(0xFF);
+	Send(ID);
+	Send(0x04);
+	Send(0x03);
+	Send(0x10);
+	Send(Mode);
+	Sum=0xFF+0xFF+ID+0x04+0x03+0x10+Mode;
+	Send(Sum);
+}
 void ChangeID(uint8_t ID)        /* ¸Ä±ä¶æ»úµÄID ¶Ïµç±£´æ   0<= ID <=255   */
 {
 	USART1_Config();
@@ -265,6 +279,58 @@ void speedtest(uint8_t ID,uint8_t ch,uint16_t speed)     //IDÑ¡È¡¶æ»úID   chÈ¡0»
 	RECEIVE_Config();
 	
 }
+u8 read_current_location(uint16_t ID,u8 address)																												
+{
+	int num=0;
+	if (address==0x24)
+		num=0;
+	if (address==0x25)
+		num=1;
+	USART1_Config();
+	
+	Delayus(10000);
+	Send(0xFF);
+	Send(0xFF);
+	Send(ID);
+	Send(0x04);
+	Send(0x02);
+	Send(address);
+	Send(0x01);
+	Sum=~(ID+0x04+0x02+address+0x01);
+	Send(Sum);
+																																							
+	 RECEIVE_Config();
+	 Delayus(2000);																																//´®¿ÚÖÐ¶Ï½ÓÊÕ·µ»ØÖ¸Áî
+	
+	return Receiving(num);																										//·µ»Øµ±Ç°½Ç °Ñ0~1023µÄÊý¾Ý×ª»»³É0~300
+}
+u16 read_location(u8 ID)
+{
+		u8 i=0;
+		u8 location_L,location_H=0;
+		u16 location=0;
+	
+	u16 a[5];
+	u16 k=0;
+	
+	for(i=0;i<5;i++)
+	{
+			location_L=read_current_location(ID,0x24);															//¶Áµ±Ç°µµÎ» ²¢´¦Àí  num
+			Delayus(10000);
+			location_H=read_current_location(ID,0x25);
+			location=(u16)location_H<<8|(u16)location_L;
+			a[i]=location;		
+			Delayus(10000);
+	}
+	for(i=0;i<5;i++)
+	{
+			if(k<a[i])	
+			{
+				k=a[i];
+			}
+	}
+	return k;
+}
 void Delayus(uint32_t time)
 {
 	uint32_t i;
@@ -275,4 +341,15 @@ void Delayus(uint32_t time)
 		while(i--);
 	}
 }
-
+u8 JudgeToGO(u8 ID,u16 Angle)
+{
+	int16_t temp=0;
+	while(1)
+	{
+		temp=read_location(ID)-Angle;
+		if(temp<0)
+			temp=0-temp;
+		if(temp<60)
+			return 1;
+	}
+}

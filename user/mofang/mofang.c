@@ -12,75 +12,72 @@ void Delayms(uint16_t time);
 #define _low 4
 
 int number[4][6]={
-{20,335,655,950,400,545},
+{20,335,655,950,400,542},
 {20,335,650,950,130,280},
-{30,340,660,970,507,630},
+{30,340,660,970,507,627},
 {30,340,650,960,560,700},
 }; 							//  主舵机转180  -90°   原始位置    90°     副舵机收  伸
-
-//void open()
-//{
-//	uint8_t i;
-//	
-//	for(i=2;i<9;i=i+2)
-//	{
-//		ClockWise(i,0,_low);
-//	}
-//}
-//void close()
-//{
-//		uint8_t i;
-//	
-//	for(i=0;i<9;i=i+2)
-//	{
-//		ClockWise(i,0,_high);
-//	}
-//}
 void left90(uint8_t _ID) 
 {
 	char ID=2*_ID-1;
 	ClockWise(ID,0,number[_ID-1][med]);
-	Delayms(100);
-	ClockWise(ID+1,0,number[_ID-1][_high]);
-	Delayms(100);
-	ClockWise(ID,0,number[_ID-1][high]);
- 	Delayms(2000);
-  ClockWise(ID+1,0,number[_ID-1][_low]);
-	Delayms(2000);
 	ClockWise(ID,0,number[_ID-1][med]);
-	Delayms(2000);
+	while(JudgeToGO(ID,number[_ID-1][med])!=1);
+	
 	ClockWise(ID+1,0,number[_ID-1][_high]);
-	Delayms(2000);
+	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
+	
+	ClockWise(ID,0,number[_ID-1][high]);
+ 	while(JudgeToGO(ID,number[_ID-1][high])!=1);
+	
+  ClockWise(ID+1,0,number[_ID-1][_low]);
+	while(JudgeToGO(ID+1,number[_ID-1][_low])!=1);
+	
+	ClockWise(ID,0,number[_ID-1][med]);
+	while(JudgeToGO(ID,number[_ID-1][med])!=1);
+	
+	ClockWise(ID+1,0,number[_ID-1][_high]);
+	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
 }
 void right90(uint8_t _ID)  
 {
 	char ID=2*_ID-1;
 	ClockWise(ID,0,number[_ID-1][med]);
+	while(JudgeToGO(ID,number[_ID-1][med])!=1);
 	ClockWise(ID+1,0,number[_ID-1][_high]);
+	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
+	
 	ClockWise(ID,0,number[_ID-1][low]);
- 	Delayms(2000);
+ 	while(JudgeToGO(ID,number[_ID-1][low])!=1);
+	
   ClockWise(ID+1,0,number[_ID-1][_low]);
-	Delayms(2000);
+	while(JudgeToGO(ID+1,number[_ID-1][_low])!=1);
+	
 	ClockWise(ID,0,number[_ID-1][med]);
-	Delayms(2000);
+	while(JudgeToGO(ID,number[_ID-1][med])!=1);
+	
 	ClockWise(ID+1,0,number[_ID-1][_high]);
-	Delayms(2000);
+	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
 }
 void turn180(uint8_t _ID) 
 {
 	char ID=2*_ID-1;
-	REG_Write(ID,0,number[_ID-1][med]);
-	REG_Write(ID+1,0,number[_ID-1][_high]);
-	Action();
-	Delayms(200);
-	ClockWise(ID,0,number[_ID-1][zero]);
- 	Delayms(2000);
-  ClockWise(ID+1,0,number[_ID-1][_low]);
-	Delayms(2000);
 	ClockWise(ID,0,number[_ID-1][med]);
-	Delayms(2000);
+	while(JudgeToGO(ID,number[_ID-1][med])!=1);
 	ClockWise(ID+1,0,number[_ID-1][_high]);
-	Delayms(2000);
+	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
+	
+	ClockWise(ID,0,number[_ID-1][zero]);
+ 	while(JudgeToGO(ID,number[_ID-1][zero])!=1);
+	
+  ClockWise(ID+1,0,number[_ID-1][_low]);
+	while(JudgeToGO(ID+1,number[_ID-1][_low])!=1);
+	
+	ClockWise(ID,0,number[_ID-1][med]);
+	while(JudgeToGO(ID,number[_ID-1][med])!=1);
+	
+	ClockWise(ID+1,0,number[_ID-1][_high]);
+	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
 }
 
 void allleft90()               /* 整体逆时针90  */
@@ -89,27 +86,32 @@ void allleft90()               /* 整体逆时针90  */
 	REG_Write(8,0,number[3][_low]);
 	REG_Write(4,0,number[1][_low]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(4,number[1][_low])!=1);
+	
 	REG_Write(5,0,number[2][high]);
 	REG_Write(1,0,number[0][low]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(1,number[0][low])!=1);
+	
 	REG_Write(4,0,number[1][_high]);
 	REG_Write(8,0,number[3][_high]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(8,number[3][_high])!=1);
+	
 	REG_Write(6,0,number[2][_low]);
 	REG_Write(2,0,number[0][_low]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(2,number[0][_low])!=1);
+	
 	REG_Write(1,0,number[0][med]);
 	REG_Write(5,0,number[2][med]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(5,number[2][med])!=1);
+	
 	REG_Write(2,0,number[0][_high]);
 	REG_Write(6,0,number[2][_high]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(6,number[2][_high])!=1);
 }
 void allright90()              /* 整体顺时针90  */
 {
@@ -117,34 +119,34 @@ void allright90()              /* 整体顺时针90  */
 	REG_Write(4,0,number[1][_low]);
 	REG_Write(8,0,number[3][_low]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(8,number[3][_low])!=1);
+	
 	REG_Write(1,0,number[0][high]);
 	REG_Write(5,0,number[2][low]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(5,number[2][low])!=1);
+	
 	REG_Write(4,0,number[1][_high]);
 	REG_Write(8,0,number[3][_high]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(8,number[3][_high])!=1);
+	
 	REG_Write(6,0,number[2][_low]);
 	REG_Write(2,0,number[0][_low]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(2,number[0][_low])!=1);
+	
 	REG_Write(1,0,number[0][med]);
 	REG_Write(5,0,number[2][med]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(5,number[2][med])!=1);
+	
 	REG_Write(2,0,number[0][_high]);
 	REG_Write(6,0,number[3][_high]);
 	Action();
-	Delayms(2000);
+	while(JudgeToGO(6,number[3][_high])!=1);
 }
-//void all180() 
-//{
-//	allleft90();
-//	Delayms(2000);
-//	allleft90();
-//}
+
 
 void Delayms(uint16_t time)
 {
@@ -155,7 +157,180 @@ void Delayms(uint16_t time)
 		while(j--);
 	}
 }
+void start()
+{
+	ClockWise(1,0,number[0][med]);
+	ClockWise(1,0,number[0][med]);
+	ClockWise(3,0,number[1][med]);
+	ClockWise(5,0,number[2][med]);
+	ClockWise(7,0,number[3][med]);
+	while(JudgeToGO(7,number[3][med])!=1);
+	
+	ClockWise(2,0,number[0][_high]);
+	while(JudgeToGO(2,number[0][_high])!=1);
+	REG_Write(4,0,number[1][_high]);
+	REG_Write(8,0,number[3][_high]);
+	Action();
+	while(JudgeToGO(8,number[3][_high])!=1);
+	ClockWise(6,0,number[2][_high]);
+	while(JudgeToGO(6,number[2][_high])!=1);
+}
+void end()
+{
+	REG_Write(1,0,number[0][med]);
+	REG_Write(1,0,number[0][med]);
+	REG_Write(3,0,number[1][med]);
+	REG_Write(5,0,number[2][med]);
+	REG_Write(7,0,number[3][med]);
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(4,0,number[1][_low]);
+	REG_Write(8,0,number[3][_low]);
+	REG_Write(6,0,number[2][_low]);
+	Action();
+	while(JudgeToGO(6,number[2][_low])!=1);
+}
+void U()
+{
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(6,0,number[2][_low]);
+	Action();
+	while(JudgeToGO(6,number[2][_low])!=1);
+	REG_Write(3,0,number[1][low]);
+	REG_Write(7,0,number[3][high]);
+	Action();
+	while(JudgeToGO(7,number[3][high])!=1);
+}
+void D()
+{
+	REG_Write(3,0,number[1][high]);
+	REG_Write(7,0,number[3][low]);
+	Action();
+	while(JudgeToGO(7,number[3][low])!=1);
+}
+void L()
+{
+	REG_Write(3,0,number[1][med]);
+	REG_Write(3,0,number[1][med]);
+	REG_Write(7,0,number[3][med]);
+	Action();
+	while(JudgeToGO(7,number[3][med])!=1);
+	
+	REG_Write(2,0,number[0][_high]);
+	REG_Write(6,0,number[2][_high]);
+	Action();
+	while(JudgeToGO(6,number[2][_high])!=1);
+	
+	REG_Write(4,0,number[1][_low]);
+	REG_Write(8,0,number[3][_low]);
+	Action();
+	while(JudgeToGO(8,number[3][_low])!=1);
+	
+	REG_Write(1,0,number[0][high]);
+	REG_Write(5,0,number[2][low]);
+	Action();
+	while(JudgeToGO(5,number[2][low])!=1);
+}
+void R()
+{
+	REG_Write(1,0,number[0][low]);
+	REG_Write(1,0,number[0][low]);
+	REG_Write(5,0,number[2][high]);
+	Action();
+	while(JudgeToGO(5,number[2][high])!=1);
 
+}
+void B()
+{
+	REG_Write(4,0,number[1][_high]);
+	REG_Write(4,0,number[1][_high]);
+	REG_Write(8,0,number[3][_high]);
+	Action();
+	while(JudgeToGO(8,number[3][_high])!=1);
+	
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(6,0,number[3][_low]);
+	Action();
+	while(JudgeToGO(6,number[3][_low])!=1);
+	
+	REG_Write(1,0,number[0][med]);
+	REG_Write(5,0,number[2][med]);
+	Action();
+	while(JudgeToGO(5,number[2][med])!=1);
+	
+	REG_Write(2,0,number[0][_high]);
+	REG_Write(6,0,number[3][_high]);
+	Action();
+	while(JudgeToGO(6,number[3][_high])!=1);
+	
+	REG_Write(4,0,number[1][_low]);
+	REG_Write(8,0,number[3][_low]);
+	Action();
+	while(JudgeToGO(8,number[3][_low])!=1);
+	
+	REG_Write(1,0,number[0][low]);
+	REG_Write(5,0,number[2][high]);
+	Action();
+	while(JudgeToGO(5,number[2][high])!=1);
+}
+void Retn()
+{
+	REG_Write(1,0,number[0][med]);
+	REG_Write(1,0,number[0][med]);
+	REG_Write(5,0,number[2][med]);
+	Action();
+	while(JudgeToGO(5,number[2][med])!=1);
+	
+	REG_Write(4,0,number[1][_high]);
+	REG_Write(8,0,number[3][_high]);
+	Action();
+	while(JudgeToGO(8,number[3][_high])!=1);
+	
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(6,0,number[2][_low]);
+	Action();
+	while(JudgeToGO(6,number[2][_low])!=1);
+	
+	REG_Write(1,0,number[0][low]);
+	REG_Write(5,0,number[2][high]);
+	Action();
+	while(JudgeToGO(5,number[2][high])!=1);
+	
+	REG_Write(2,0,number[0][_high]);
+	REG_Write(6,0,number[3][_high]);
+	Action();
+	while(JudgeToGO(6,number[3][_high])!=1);
+	
+	REG_Write(4,0,number[1][_low]);
+	REG_Write(8,0,number[3][_low]);
+	Action();
+	while(JudgeToGO(8,number[3][_low])!=1);
+	
+	REG_Write(1,0,number[0][med]);
+	REG_Write(5,0,number[2][med]);
+	Action();
+	while(JudgeToGO(5,number[2][med])!=1);
+	
+	REG_Write(4,0,number[1][_high]);
+	REG_Write(8,0,number[3][_high]);
+	Action();
+	while(JudgeToGO(8,number[3][_high])!=1);
+}
+void Correction()
+{
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(6,0,number[3][_low]);
+	Action();
+	while(JudgeToGO(2,number[0][_low])!=1);
+	while(JudgeToGO(6,number[3][_low])!=1);
+	
+	REG_Write(2,0,number[0][_high]);
+	REG_Write(6,0,number[3][_high]);
+	Action();
+	while(JudgeToGO(2,number[0][_high])!=1);
+	while(JudgeToGO(6,number[3][_high])!=1);
+}
 void rubikStep(char *step)
 {
 	u8 m=0;
@@ -163,6 +338,7 @@ void rubikStep(char *step)
 	{
 		switch(step[m])
 		{
+			case 7:Correction();allright90();break;
 			case 11:F1();break;
 			case 12:F2();break;
 			case 13:F3();break;
@@ -183,180 +359,69 @@ void rubikStep(char *step)
 			case 63:D3();break;
 			default:break;
 		}
-		Delayms(2000);
 	}
 }
-void start()
-{
-	ClockWise(1,0,number[0][med]);
-	ClockWise(1,0,number[0][med]);
-	ClockWise(3,0,number[1][med]);
-	ClockWise(5,0,number[2][med]);
-	ClockWise(7,0,number[3][med]);
-	Delayms(2000);
-	ClockWise(2,0,number[0][_high]);
-	Delayms(2000);
-	REG_Write(4,0,number[1][_high]);
-	REG_Write(8,0,number[3][_high]);
-	Action();
-	Delayms(2000);
-	ClockWise(6,0,number[2][_high]);
-}
-void end()
-{
-	ClockWise(2,0,number[0][_low]);
-	ClockWise(2,0,number[0][_low]);
-	ClockWise(4,0,number[1][_low]);
-	ClockWise(6,0,number[2][_low]);
-	ClockWise(8,0,number[3][_low]);
-	ClockWise(1,0,number[0][med]);
-	ClockWise(3,0,number[1][med]);
-	ClockWise(5,0,number[2][med]);
-	ClockWise(7,0,number[3][med]);
-}
-void U()
-{
-	REG_Write(2,0,number[0][_low]);
-	REG_Write(2,0,number[0][_low]);
-	REG_Write(6,0,number[2][_low]);
-	Action();
-	Delayms(2000);
-	REG_Write(3,0,number[1][low]);
-	REG_Write(7,0,number[3][high]);
-	Action();
-}
-void D()
-{
-	REG_Write(3,0,number[1][high]);
-	REG_Write(7,0,number[3][low]);
-	Action();
-}
-void L()
-{
-	REG_Write(3,0,number[1][med]);
-	REG_Write(3,0,number[1][med]);
-	REG_Write(7,0,number[3][med]);
-	Action();
-	Delayms(2000);
-	REG_Write(2,0,number[0][_high]);
-	REG_Write(6,0,number[2][_high]);
-	Action();
-	Delayms(2000);
-	REG_Write(4,0,number[1][_low]);
-	REG_Write(8,0,number[3][_low]);
-	Action();
-	Delayms(2000);
-	REG_Write(1,0,number[0][high]);
-	REG_Write(5,0,number[2][low]);
-	Action();
-}
-void R()
-{
-	REG_Write(1,0,number[0][low]);
-	REG_Write(1,0,number[0][low]);
-	REG_Write(5,0,number[2][high]);
-	Action();
-	Delayms(2000);
 
-}
-void B()
-{
-	REG_Write(4,0,number[1][_high]);
-	REG_Write(4,0,number[1][_high]);
-	REG_Write(8,0,number[3][_high]);
-	Action();
-	Delayms(2000);
-	REG_Write(2,0,number[0][_low]);
-	REG_Write(6,0,number[3][_low]);
-	Delayms(2000);
-	Action();
-	REG_Write(1,0,number[0][med]);
-	REG_Write(5,0,number[2][med]);
-	Delayms(2000);
-	Action();
-	REG_Write(2,0,number[0][_high]);
-	REG_Write(6,0,number[3][_high]);
-	Delayms(2000);
-	Action();
-	REG_Write(4,0,number[1][_low]);
-	REG_Write(8,0,number[3][_low]);
-	Delayms(2000);
-	Action();
-	REG_Write(1,0,number[0][low]);
-	REG_Write(5,0,number[2][high]);
-}
-void Retn()
-{
-	REG_Write(1,0,number[0][med]);
-	REG_Write(1,0,number[0][med]);
-	REG_Write(5,0,number[2][med]);
-	Action();
-	Delayms(2000);
-	REG_Write(4,0,number[1][_high]);
-	REG_Write(8,0,number[3][_high]);
-	Action();
-	Delayms(2000);
-	REG_Write(2,0,number[0][_low]);
-	REG_Write(6,0,number[2][_low]);
-	Action();
-	Delayms(2000);
-	REG_Write(1,0,number[0][low]);
-	REG_Write(5,0,number[2][high]);
-	Action();
-	Delayms(2000);
-	REG_Write(2,0,number[0][_high]);
-	REG_Write(6,0,number[3][_high]);
-	Action();
-	Delayms(2000);
-	REG_Write(4,0,number[1][_low]);
-	REG_Write(8,0,number[3][_low]);
-	Action();
-	Delayms(2000);
-	REG_Write(1,0,number[0][med]);
-	REG_Write(5,0,number[2][med]);
-	Action();
-	Delayms(2000);
-	REG_Write(4,0,number[1][_high]);
-	REG_Write(8,0,number[3][_high]);
-	Action();
-}
 void Optimization(char *step)
 {
 	int i = 0,n=0;
+	int Number = 0;
+	while (step[Number] != 0)
+		Number++;
 	while (step[n] != 0)
 	{
+		if (step[n] / 10 == 1 || step[n] / 10 == 2)
+		{
+			for (i = Number; i > n; i--)
+				step[i] = step[i - 1];
+			step[n + 1] = step[n] + 20;
+			step[n] = 7;
+			Number++;
+			i = n+1;
+			while (step[i] != 0)
+			{
+				i++;
+				switch (step[i] / 10)
+				{
+				case 1:step[i] += 20; break;
+				case 2:step[i] += 20; break;
+				case 3:step[i] -= 10; break;
+				case 4:step[i] -= 30; break;
+				default:break;
+				}
+			}
+		}
 		n++;
-		if (step[n] / 10 == 1)
+	}
+}
+void ChangeStep(char *step)
+{
+	int n = 0, i = 0;
+	int Number = 0;
+	while (step[Number] != 0)
+		Number++;
+	while (step[n] != 0)
+	{
+		if (step[n] % 10 == 2)
 		{
-			i = n;
-			while (step[i] != 0)
+			for (i = Number; i > n; i--)
 			{
-				i++;
-				switch (step[i] / 10)
-				{
-				case 1:step[i] += 20; break;
-				case 2:step[i] += 20; break;
-				case 3:step[i] -= 10; break;
-				case 4:step[i] -= 30; break;
-				default:break;
-				}
+				step[i] = step[i - 1];
 			}
+			step[n] = step[n]--;
+			step[n + 1] = step[n];
+			Number++;
 		}
-		if (step[n] / 10 == 2)
+		if (step[n] / 10 == 1 || step[n] / 10 == 2)
 		{
-			i = n;
-			while (step[i] != 0)
+			for (i = Number; i > n; i--)
 			{
-				i++;
-				switch (step[i] / 10)
-				{
-				case 1:step[i] += 20; break;
-				case 2:step[i] += 20; break;
-				case 3:step[i] -= 10; break;
-				case 4:step[i] -= 30; break;
-				default:break;
-				}
+				step[i] = step[i - 1];
 			}
+			step[n] = 10;
+			step[n + 1] = step[n] + 20;
+			Number++;
 		}
+		n++;
 	}
 }

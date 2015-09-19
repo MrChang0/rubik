@@ -39,8 +39,8 @@ int main(void)
 //		{ 6,3,4,5,2,6,2,4,4 },//R 4
 //		{ 6,6,6,2,3,6,3,1,2 },//B 5
 	};
-	char step[40]={0};
-	end();
+	char step[100]={0};
+//	end();
 	init();
 //	Mid[4].x=160;
 //	Mid[4].y=120;
@@ -78,6 +78,7 @@ int main(void)
 			{
 				Rubik(rubik,step);
 				Optimization(step);
+				ChangeStep(step);
 				rubikStep(step);
 				end();
 				page=0;
@@ -96,7 +97,6 @@ int main(void)
 //			time=0;
 			Ov7725_vsync = 0;
 		}
-
 		  displaystep(step);
 	}
 }
