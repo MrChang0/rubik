@@ -12,9 +12,9 @@ void Delayms(uint16_t time);
 #define _low 4
 
 int number[4][6]={
-{20,335,655,950,400,542},
+{20,335,655,950,400,546},
 {20,335,650,950,130,280},
-{30,340,660,970,507,627},
+{30,340,660,970,507,629},
 {30,340,650,960,560,700},
 }; 							//  主舵机转180  -90°   原始位置    90°     副舵机收  伸
 void left90(uint8_t _ID) 
@@ -62,10 +62,11 @@ void right90(uint8_t _ID)
 void turn180(uint8_t _ID) 
 {
 	char ID=2*_ID-1;
+	
 	ClockWise(ID,0,number[_ID-1][med]);
 	while(JudgeToGO(ID,number[_ID-1][med])!=1);
-	ClockWise(ID+1,0,number[_ID-1][_high]);
-	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
+	ClockWise(ID+1,0,number[_ID-1][_high]-5);
+	while(JudgeToGO(ID+1,number[_ID-1][_high]-5)!=1);
 	
 	ClockWise(ID,0,number[_ID-1][zero]);
  	while(JudgeToGO(ID,number[_ID-1][zero])!=1);
@@ -338,7 +339,7 @@ void rubikStep(char *step)
 	{
 		switch(step[m])
 		{
-			case 7:Correction();allright90();break;
+			case 7:allright90();break;
 			case 11:F1();break;
 			case 12:F2();break;
 			case 13:F3();break;

@@ -103,7 +103,7 @@ void Baud_Config(uint16_t ID,uint32_t baud)     /*  前六个波特率断电保存   */
 void ClockWise(uint16_t ID,uint16_t speed,uint16_t angle)      /* 舵机模式  0<= speed<= 100 0<= angle<=1023   */
 { 
 	uint16_t buf2,buf1;
-	buf1=700;
+	buf1=speed;
 	speed_H=(uint8_t)(buf1>>8);
 	speed_L=(uint8_t)buf1;
 	
@@ -306,14 +306,14 @@ u8 read_current_location(uint16_t ID,u8 address)
 }
 u16 read_location(u8 ID)
 {
-		u8 i=0;
-		u8 location_L,location_H=0;
-		u16 location=0;
+	u8 i=0,j=0;
+	u8 location_L,location_H=0;
+	u16 location=0;
 	
-	u16 a[5];
-	u16 k=0;
+	u16 a[7];
+	u16 temp=0;
 	
-	for(i=0;i<5;i++)
+	for(i=0;i<7;i++)
 	{
 			location_L=read_current_location(ID,0x24);															//读当前档位 并处理  num
 			Delayus(10000);
@@ -322,14 +322,17 @@ u16 read_location(u8 ID)
 			a[i]=location;		
 			Delayus(10000);
 	}
-	for(i=0;i<5;i++)
-	{
-			if(k<a[i])	
+	for (j = 0; j < 6; j++)
+			for (i = 0; i < 6 - j; i++)
 			{
-				k=a[i];
+					if(a[i] > a[i + 1])
+					{
+							temp = a[i];
+							a[i] = a[i + 1];
+							a[i + 1] = temp;
+					}
 			}
-	}
-	return k;
+	return a[4];
 }
 void Delayus(uint32_t time)
 {
@@ -349,7 +352,7 @@ u8 JudgeToGO(u8 ID,u16 Angle)
 		temp=read_location(ID)-Angle;
 		if(temp<0)
 			temp=0-temp;
-		if(temp<60)
+		if(temp<50)
 			return 1;
 	}
 }

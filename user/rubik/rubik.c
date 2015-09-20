@@ -247,7 +247,7 @@ int searchphase(int movesleft, int movesdone, int lastmove)
 	return 0;
 }
 
-void Rubikout(char argv[][4], char* Step)                                                     // 修改一 volatile 没有用
+void Rubikout(char argv[][4], char* Step)                                                  
 {
 	int f = 0, i = 0, j = 0, k = 0, pc = 0, mor = 0,m=0;
 	for (; k<20; k++) val[k] = k<12 ? 2 : 3;
@@ -278,7 +278,7 @@ void Rubikout(char argv[][4], char* Step)                                       
 	Step[m + 1] = 0;
 }
 
-void Rubik(char rubikdeal[][9], char* step)        																							// 修改2
+void Rubik(char rubikdeal[][9], char* step)        																				
 {
 	char MCube[21][4];
 	int i = 0, t1 = 0, t2 = 0, t3 = 0;

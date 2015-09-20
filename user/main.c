@@ -42,6 +42,7 @@ int main(void)
 	char step[100]={0};
 //	end();
 	init();
+	end();
 //	Mid[4].x=160;
 //	Mid[4].y=120;
 //	start();
@@ -78,7 +79,7 @@ int main(void)
 			{
 				Rubik(rubik,step);
 				Optimization(step);
-				ChangeStep(step);
+				//ChangeStep(step);
 				rubikStep(step);
 				end();
 				page=0;
@@ -97,7 +98,6 @@ int main(void)
 //			time=0;
 			Ov7725_vsync = 0;
 		}
-		  displaystep(step);
 	}
 }
 
@@ -126,18 +126,6 @@ void init()
 //	/* TIM2 重新开时钟，开始计时 */
 //	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
 	
-}
-void displaystep(char* step)
-{
-	int i=0;
-	while(step[i] != 0)
-	{
-		if(i<20)
-			LCD_DisNum(10+i*15,140,step[i],WHITE);
-		else
-			LCD_DisNum(10+(i-20)*15,160,step[i],WHITE);
-		i++;
-	}
 }
 /*********************************************END OF FILE**********************/
 
