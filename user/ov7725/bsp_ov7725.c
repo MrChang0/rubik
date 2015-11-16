@@ -13,17 +13,16 @@ u8 page=0;
 
 uint16_t MidColorData[3][3];
 
-u8 HR=1,HL=1,VU=1,VD=1;
-
 MidCoordinate_type  Mid[9];
-u16 Radius;
-uint16_t HorizontalL[pointNum];     //横左
-uint16_t HorizontalR[pointNum];     //横右
-uint16_t VerticalU[pointNum];       //竖上
-uint16_t VerticalD[pointNum];       //竖下
+//u16 Radius;
+uint16_t ColorData4[4][pointNum];     //横左
+
+uint16_t ColorData2[4][pointNum];     //横左
+uint16_t ColorData6[4][pointNum];     //横左
+
 
 u8 Judgerubik=0;
-u8 n=0;
+//u8 n=0;
 char flag2;
 
 typedef struct Reg
@@ -158,10 +157,10 @@ static void FIFO_GPIO_Config(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	
 
 		/* 1W LED 灯控制 */
-	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
-		//GPIO_ResetBits(GPIOA, GPIO_Pin_8);
-		GPIO_SetBits(GPIOA, GPIO_Pin_8);
+//	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+//    GPIO_Init(GPIOA, &GPIO_InitStructure);
+//		GPIO_ResetBits(GPIOA, GPIO_Pin_8);
+//		GPIO_SetBits(GPIOA, GPIO_Pin_8);
 	
 		/*PD3(FIFO_WEN--FIFO写使能)*/
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
@@ -345,105 +344,117 @@ ErrorStatus Ov7725_Init(void)
 void ImagDisp(void)
 {
 	
-	uint16_t i, j,m=0;
+	uint16_t i,j,m=0;
 	uint16_t Camera_Data;
-	HR=1;HL=1;VU=1;VD=1;
-	for(i = 0; i < 240; i++)
-	{
-		for(j = 0; j < 320; j++)
-		{
+	for(i = 0; i < 240; i++){
+		for(j = 0; j < 320; j++){
 			READ_FIFO_PIXEL(Camera_Data);		/* 从FIFO读出一个rgb565像素到Camera_Data变量 */
-//			if(i==Mid[4].y&&j>Mid[4].x&&j<=Mid[4].x+pointNum)
-//				HorizontalR[j-Mid[4].x]=Camera_Data;
-//			if(i==Mid[4].y&&j<Mid[4].x&&j>=Mid[4].x-pointNum)
-//				HorizontalL[Mid[4].x-j]=Camera_Data;
-//			if(j==Mid[4].x&&i>=Mid[4].y-pointNum&&i<Mid[4].y)
-//				VerticalU[Mid[4].y-i]=Camera_Data;
-//			if(j==Mid[4].x&&i>Mid[4].y&&i<=Mid[4].y+pointNum)
-//				VerticalD[i-Mid[4].y]=Camera_Data;
+			if((i == Mid[4].y) && (j > Mid[4].x) && (j <= Mid[4].x + pointNum))
+				ColorData4[0][j-Mid[4].x] = Camera_Data;
+			if((i == Mid[4].y) && (j < Mid[4].x) && (j >= Mid[4].x - pointNum))
+				ColorData4[1][Mid[4].x-j] = Camera_Data;
+			if((j == Mid[4].x) && (i >= Mid[4].y - pointNum) && (i < Mid[4].y))
+				ColorData4[2][Mid[4].y-i] = Camera_Data;
+			if((j == Mid[4].x) && (i > Mid[4].y) && ( i <= Mid[4].y + pointNum))
+				ColorData4[3][i-Mid[4].y] = Camera_Data;
 			
-			if(i==80&&j==80)
+			if((i == Mid[2].y) && (j > Mid[2].x) && (j <= Mid[2].x + pointNum))
+				ColorData4[0][j-Mid[2].x] = Camera_Data;
+			if((i == Mid[2].y) && (j < Mid[2].x) && (j >= Mid[2].x - pointNum))
+				ColorData4[1][Mid[2].x-j] = Camera_Data;
+			if((j == Mid[2].x) && (i >= Mid[2].y - pointNum) && (i < Mid[2].y))
+				ColorData4[2][Mid[2].y-i] = Camera_Data;
+			if((j == Mid[2].x) && (i > Mid[2].y) && ( i <= Mid[2].y + pointNum))
+				ColorData4[3][i-Mid[2].y] = Camera_Data;
+//			
+//			if(i==Mid[6].y&&j>Mid[6].x&&j<=Mid[6].x+pointNum)
+//				ColorData6[0][j-Mid[6].x]=Camera_Data;
+//			if(i==Mid[6].y&&j<Mid[6].x&&j>=Mid[6].x-pointNum)
+//				ColorData6[1][Mid[6].x-j]=Camera_Data;
+//			if(j==Mid[6].x&&i>=Mid[6].y-pointNum&&i<Mid[6].y)
+//				ColorData6[2][Mid[6].y-i]=Camera_Data;
+//			if(j==Mid[6].x&&i>Mid[6].y&&i<=Mid[6].y+pointNum)
+//				ColorData6[3][i-Mid[6].y]=Camera_Data;
+			
+			if(i==70&&j==125)
 			{
 				MidColorData[0][0]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==80&&j==120)
+			if(i==70&&j==167)
 			{
 				MidColorData[0][1]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==80&&j==160)
+			if(i==70&&j==208)
 			{ 	
 				MidColorData[0][2]=Camera_Data;
 				Camera_Data=0;
 			}
 			
-			if(i==120&&j==80)
+			if(i==110&&j==127)
 			{
 				MidColorData[1][0]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==120&&j==120)
+			if(i==110&&j==168)
 			{
 				MidColorData[1][1]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==120&&j==160)
+			if(i==110&&j==208)
 			{
 				MidColorData[1][2]=Camera_Data;
 				Camera_Data=0;
 			}
 			
-			if(i==160&&j==80)
+			if(i==145&&j==128)
 			{
 				MidColorData[2][0]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==160&&j==120)
+			if(i==145&&j==168)
 			{
 				MidColorData[2][1]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==160&&j==160)
+			if(i==145&&j==208)
 			{
 				MidColorData[2][2]=Camera_Data;
-				Camera_Data=0;
-			}
-			if(i==Mid[4].y&&j==Mid[4].x)
-			{
-				MidColorData[1][1]=Camera_Data;
 				Camera_Data=0;
 			}
 			LCD_WR_Data(Camera_Data);
 		}
 	}
-	m=0;
-	for(i=0;i<3;i++)
-	{
-		for(j=0;j<3;j++)
-		{
+	for(i=0;i<3;i++){
+		for(j=0;j<3;j++){
 			RGBtoHSL(MidColorData[i][j],hsl_l+m);
-			outcolor( hsl_l+m);
+			outcolor(hsl_l+m);
 			m++;
 		}
 	}
-//	while(RGBCompare(VerticalU[VU],0)>30&&VU<=pointNum)
-//		VU++;	
-//	while(RGBCompare(VerticalD[VD],0)>30&&VD<=pointNum)
-//		VD++;
-//	while(RGBCompare(HorizontalL[HL],0)>30&&HL<=pointNum)
-//		HL++;
-//	while(RGBCompare(HorizontalR[HR],0)>30&&HR<=pointNum)
-//		HR++;
-//	if(VD<40&&VU<40&&HL<40&&HR<40)
-//	{
-//		Judgerubik=1;
-//		Mid[4].x=(Mid[4].x*2+HR-HL)/2;
-//		Mid[4].y=(Mid[4].y*2-VU+VD)/2;
-//		Radius=(HL+HR+VD+VU)/4;
-//	}
-//	else 
-//		Judgerubik=0;
+	if(ColorDataCompare(ColorData4))
+	{
+//		if(ColorDataCompare(ColorData2))
+			Judgerubik=1;
+//		else
+//			Judgerubik=0;
+	}
+	else
+		Judgerubik=0;
+}
+u8 ColorDataCompare(uint16_t ColorData[][pointNum])
+{
+	u8 temp=0,i=0;
+	for(i=0;i<4;i++)
+	{
+		temp=0;
+		while(RGBCompare(ColorData[i][temp],0)>30&&temp<pointNum)
+			temp++;
+		if(temp>=pointNum)
+			return 0;
+	}
+	return 1;
 }
 void EXTI0_IRQHandler(void)
 {
@@ -468,20 +479,21 @@ void EXTI0_IRQHandler(void)
 }
 void EXTI15_10_IRQHandler(void)        //按键中断  点亮闪光灯    PC13    PA8
 {
-	u16 i=5000;
+//	u16 i=5000;
 	if(EXTI_GetITStatus (EXTI_Line13)!=RESET)
 	{
-		if(n==0)
-		{
-			while(i--);
-			n++;
-			EXTI_ClearITPendingBit (EXTI_Line13);
-		}
-		if(n==1)
-		{
-			n=0;
-			page++;
-		}
+		Judgerubik=1;
+//		if(n==0)
+//		{
+//			while(i--);
+//			n++;
+//			EXTI_ClearITPendingBit (EXTI_Line13);
+//		}
+//		if(n==1)
+//		{
+//			n=0;
+//			page++;
+//		}
 	}
 		
 //	GPIO_WriteBit(GPIOA,GPIO_Pin_8,(BitAction)(1-GPIO_ReadOutputDataBit(GPIOA,GPIO_Pin_8)));
@@ -542,5 +554,5 @@ void Dispaly_H(void)
 	LCD_DisColor(235, 50, hsl_l[7].color );	
 	LCD_DisColor(260, 50, hsl_l[8].color );	
 
-  LCD_DispChar(210,70,area[page/2],WHITE);
+  LCD_DispChar(210,70,area[page],WHITE);
 }

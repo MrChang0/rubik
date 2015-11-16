@@ -49,8 +49,25 @@ void RGBtoHSL(uint16_t RGB,HSL_type* hsl)          //RGB 转换HSL
 			hsl->h -= HSLMAX;
 	}
 }
-
-u16 RGBCompare(uint16_t RGB,uint16_t baseRGB)
+void RGBtoYUV(uint16_t RGB,HSL_type* hsl)          //RGB 转换YUV色系  
+{
+	uint16_t R,G,B;
+	
+	
+	R=(uint8_t)(RGB>>11);
+	G=(uint8_t)((RGB & 0x7E0) >> 5);
+	B=(uint8_t)RGB&0x1F;
+	
+	R=((float)R/31)*255;
+	G=((float)G/63)*255;
+	B=((float)B/31)*255;
+	
+	hsl->h = (0.257 * R) + (0.504 * G) + (0.098 * B) + 16;
+	hsl->s= (0.439 * R) - (0.368 * G) - (0.071 * B) + 128;
+	hsl->l = -(0.148 * R) - (0.291 * G) + (0.439 * B) + 128;
+	
+}
+u16 RGBCompare(uint16_t RGB,uint16_t baseRGB)		//RGB偏移量
 {
 	uint16_t R, G, B,baseR,baseG,baseB;
 	uint16_t Difference;
@@ -76,7 +93,7 @@ u16 RGBCompare(uint16_t RGB,uint16_t baseRGB)
 	
 }
 
-void outcolor(HSL_type* hsl)
+void outcolor(HSL_type* hsl)  //颜色判断
 {
 	if(hsl->h >100 && hsl->h<130)    //绿色  1
 	{

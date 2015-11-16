@@ -5,5 +5,6 @@
 
 void TIM2_NVIC_Configuration(void);
 void TIM2_Configuration(void);
+void TIM1_PWM_Init(void);
 
 #endif	/* TIME_TEST_H */

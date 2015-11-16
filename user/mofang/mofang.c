@@ -14,7 +14,7 @@ void Delayms(uint16_t time);
 int number[4][6]={
 {20,335,655,950,400,546},
 {20,335,650,950,130,280},
-{30,340,660,970,507,629},
+{30,340,660,970,507,631},
 {30,340,650,960,560,700},
 }; 							//  主舵机转180  -90°   原始位置    90°     副舵机收  伸
 void left90(uint8_t _ID) 
@@ -162,6 +162,7 @@ void start()
 {
 	ClockWise(1,0,number[0][med]);
 	ClockWise(1,0,number[0][med]);
+	ClockWise(1,0,number[0][med]);
 	ClockWise(3,0,number[1][med]);
 	ClockWise(5,0,number[2][med]);
 	ClockWise(7,0,number[3][med]);
@@ -218,7 +219,7 @@ void L()
 	while(JudgeToGO(7,number[3][med])!=1);
 	
 	REG_Write(2,0,number[0][_high]);
-	REG_Write(6,0,number[2][_high]);
+	REG_Write(6,0,number[2][_high]-5);
 	Action();
 	while(JudgeToGO(6,number[2][_high])!=1);
 	
@@ -231,6 +232,8 @@ void L()
 	REG_Write(5,0,number[2][low]);
 	Action();
 	while(JudgeToGO(5,number[2][low])!=1);
+	
+	
 }
 void R()
 {
@@ -293,7 +296,7 @@ void Retn()
 	while(JudgeToGO(6,number[2][_low])!=1);
 	
 	REG_Write(1,0,number[0][low]);
-	REG_Write(5,0,number[2][high]);
+	REG_Write(5,0,number[2][high]-5);
 	Action();
 	while(JudgeToGO(5,number[2][high])!=1);
 	
@@ -316,6 +319,16 @@ void Retn()
 	REG_Write(8,0,number[3][_high]);
 	Action();
 	while(JudgeToGO(8,number[3][_high])!=1);
+	
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(6,0,number[3][_low]);
+	Action();
+	while(JudgeToGO(6,number[3][_low])!=1);
+	
+	REG_Write(2,0,number[0][_high]);
+	REG_Write(6,0,number[3][_high]);
+	Action();
+	while(JudgeToGO(6,number[3][_high])!=1);
 }
 void Correction()
 {
@@ -363,7 +376,7 @@ void rubikStep(char *step)
 	}
 }
 
-void Optimization(char *step)
+void Optimization(char *step)    //步骤优化
 {
 	int i = 0,n=0;
 	int Number = 0;
@@ -425,4 +438,25 @@ void ChangeStep(char *step)
 		}
 		n++;
 	}
+}
+
+char RubikColorJudge(char rubik[6][9])
+{
+	char i = 0, j = 0, color[6]={0};
+	for (i = 0; i < 6; i++)
+		for (j = 0; j < 9; j++)
+			switch (rubik[i][j])
+			{
+			case 1:color[0]++; break;
+			case 2:color[1]++; break;
+			case 3:color[2]++; break;
+			case 4:color[3]++; break;
+			case 5:color[4]++; break;
+			case 6:color[5]++; break;
+			default:break;
+			}
+	if (color[0]==9&&color[1]==9&&color[2]==9&&color[3]==9&&color[4]==9&&color[5]==9)
+		return 1;
+	else
+		return 0;
 }

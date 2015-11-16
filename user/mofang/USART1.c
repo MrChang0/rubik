@@ -18,7 +18,7 @@ void USART1_Config(void)
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
 	
 
-	USART_InitStructure.USART_BaudRate=19230;
+	USART_InitStructure.USART_BaudRate=1000000;
 	USART_InitStructure.USART_WordLength=USART_WordLength_8b;
 	USART_InitStructure.USART_StopBits=1;
 	USART_InitStructure.USART_Parity=USART_Parity_No;
@@ -44,41 +44,40 @@ void USART1_Config(void)
 void USART1_IRQHandler(void)                																	//串口1中断服务程序
 {
 	static u8 ch[50]={0};
-	static u8 i=0;	
+	static u8 nCount=0;	
 	u8 k=0,j=0;
-//	u8 sh_24=0,sh_25=0;
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  											//接收中断
 	{
-			ch[i] =USART_ReceiveData(USART1);	
-			i++;
-			if(i>=49)
+			ch[nCount] =USART_ReceiveData(USART1);	
+			nCount++;
+			if(nCount>=49)
 			{	
-				for(i=0;i<50;i++)
+				for(nCount=0;nCount<50;nCount++)
 				{
-						if(ch[i]==0xff && ch[i+1]==0xff && ch[i+3]==0x04 && ch[i+8]==0xff && ch[i+9]==0xff )	
+						if(ch[nCount]==0xff && ch[nCount+1]==0xff && ch[nCount+3]==0x04 && ch[nCount+8]==0xff && ch[nCount+9]==0xff )	
 						{
-								if(ch[i+5]==0x24)
+								if(ch[nCount+5]==0x24)
 								{
 									
 										for(k=0;k<15;k++)
 										{
-											sh[j]=ch[i];																										//把数据放到sh里
+											sh[j]=ch[nCount];																										//把数据放到sh里
 											j++;
-											i++;
+											nCount++;
 										}
 								}
-								if(ch[i+5]==0x25)
+								if(ch[nCount+5]==0x25)
 								{
 										for(k=0;k<15;k++)
 										{
-											xh[j]=ch[i];																										//把数据放到sh里
+											xh[j]=ch[nCount];																										//把数据放到sh里
 											j++;
-											i++;
+											nCount++;
 										}	
 								}
 							}
 				}
-				i=0;
+				nCount=0;
 			}	
   } 
 }
@@ -98,8 +97,6 @@ u8 Receiving(u8 num)																														//不知道循序会不会乱
 
 void Send(uint8_t Data)
 {
-	
-	
 	USART_SendData(USART1,Data);
 	
 	while(USART_GetFlagStatus(USART1,USART_FLAG_TC) == RESET);

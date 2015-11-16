@@ -42,6 +42,7 @@ void Correction(void);
 void Optimization(char *step);
 void rubikStep(char *step);
 void ChangeStep(char *step);
+char RubikColorJudge(char rubik[6][9]);
 
 #define U1() left90(3);
 #define U3() right90(3);

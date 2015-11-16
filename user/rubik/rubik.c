@@ -9,7 +9,7 @@ pos[20], ori[20], val[20], TEMP, *tables[8];
 
 int move1[20], moveamount[20], phase = 0,
 
-tablesize[] = { 1,4096,  6561,4096,  256,1536,  13824,576 };
+tablesize[] = {1,4096,6561,4096,256,1536,13824,576};
 
 int MidCompared(int a, int* b)
 {

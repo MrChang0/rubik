@@ -457,8 +457,6 @@ void LCD_DispStr(uint16_t x, uint16_t y, uint8_t *pstr, uint16_t color)
 //  34           1
 //  3            2
 //  0            3
-
-
 //  0    6    12
 //  ____ ____ ____
 void LCD_DisNum(uint16_t x, uint16_t y, uint16_t num, uint16_t color)

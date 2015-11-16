@@ -209,6 +209,7 @@ void Ov7725_GPIO_Config(void);
 ErrorStatus Ov7725_Init(void);
 void VSYNC_Init(void);
 void ImagDisp(void);
+u8 ColorDataCompare(uint16_t ColorData[4][pointNum]);
 void EXTI0_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);
 void Dispaly_H(void);

@@ -30,6 +30,7 @@ typedef struct
 }MidCoordinate_type;
 
 void RGBtoHSL(uint16_t RGB,HSL_type* hsl );
+void RGBtoYUV(uint16_t RGB,HSL_type* hsl);
 void outcolor(HSL_type* hsl);
 u16 RGBCompare(uint16_t RGB,uint16_t baseRGB);
 

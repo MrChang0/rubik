@@ -1,5 +1,9 @@
 #include "control.h"
 #include "USART1.h"
+//#include "bsp_ov7725.h"
+//#include "bsp_ili9341_lcd.h"
+
+//extern uint8_t Ov7725_vsync;
 
 void Delayus(uint32_t time);
 
@@ -112,7 +116,6 @@ void ClockWise(uint16_t ID,uint16_t speed,uint16_t angle)      /* 舵机模式  0<= 
 	angle_L=(u8)buf2;
 	
 	
-	
  	USART1_Config();
 	Delayus(10000);
 	Send(0xFF);
@@ -172,7 +175,7 @@ void Dynamo_Config(uint16_t ID,uint16_t speed)           //最高转速
 
 void REG_Write(uint8_t ID,uint16_t speed,uint16_t angle)   //同时启动   配置运行模式后 用Action()  启动
 {
-	float buf2,buf1;
+	uint16_t buf2,buf1;
 	buf1=speed;
 	speed_H=(u8)((uint16_t)buf1>>8);
 	speed_L=(u8)(uint16_t)buf1;
@@ -349,6 +352,7 @@ u8 JudgeToGO(u8 ID,u16 Angle)
 	int16_t temp=0;
 	while(1)
 	{
+		REG_Write(ID,0,Angle);
 		temp=read_location(ID)-Angle;
 		if(temp<0)
 			temp=0-temp;
