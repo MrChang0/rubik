@@ -49,6 +49,7 @@ void RGBtoHSL(uint16_t RGB,HSL_type* hsl)          //RGB 转换HSL
 			hsl->h -= HSLMAX;
 	}
 }
+
 void RGBtoYUV(uint16_t RGB,HSL_type* hsl)          //RGB 转换YUV色系  
 {
 	uint16_t R,G,B;
@@ -65,8 +66,8 @@ void RGBtoYUV(uint16_t RGB,HSL_type* hsl)          //RGB 转换YUV色系
 	hsl->h = (0.257 * R) + (0.504 * G) + (0.098 * B) + 16;
 	hsl->s= (0.439 * R) - (0.368 * G) - (0.071 * B) + 128;
 	hsl->l = -(0.148 * R) - (0.291 * G) + (0.439 * B) + 128;
-	
 }
+
 u16 RGBCompare(uint16_t RGB,uint16_t baseRGB)		//RGB偏移量
 {
 	uint16_t R, G, B,baseR,baseG,baseB;
@@ -90,7 +91,6 @@ u16 RGBCompare(uint16_t RGB,uint16_t baseRGB)		//RGB偏移量
 	Difference = (R - baseR)*(R - baseR) + (G - baseG)*(G - baseG) + (B - baseB)*(G - baseG);
 	
 	return Difference;
-	
 }
 
 void outcolor(HSL_type* hsl)  //颜色判断

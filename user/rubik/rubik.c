@@ -19,7 +19,6 @@ int MidCompared(int a, int* b)
 	return i;
 }
 
-
 void display(int* buf, char cube[][4])
 {
 	int i = 0, a = 0, b = 0, c = 0;

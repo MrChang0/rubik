@@ -16,6 +16,7 @@ int number[4][6]={
 {20,335,650,950,130,280},
 {30,340,660,970,507,631},
 {30,340,650,960,560,700},
+
 }; 							//  主舵机转180  -90°   原始位置    90°     副舵机收  伸
 void left90(uint8_t _ID) 
 {
@@ -24,8 +25,8 @@ void left90(uint8_t _ID)
 	ClockWise(ID,0,number[_ID-1][med]);
 	while(JudgeToGO(ID,number[_ID-1][med])!=1);
 	
-	ClockWise(ID+1,0,number[_ID-1][_high]);
-	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
+	ClockWise(ID+1,0,number[_ID-1][_high]-8);
+	while(JudgeToGO(ID+1,number[_ID-1][_high]-8)!=1);
 	
 	ClockWise(ID,0,number[_ID-1][high]);
  	while(JudgeToGO(ID,number[_ID-1][high])!=1);
@@ -44,8 +45,8 @@ void right90(uint8_t _ID)
 	char ID=2*_ID-1;
 	ClockWise(ID,0,number[_ID-1][med]);
 	while(JudgeToGO(ID,number[_ID-1][med])!=1);
-	ClockWise(ID+1,0,number[_ID-1][_high]);
-	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
+	ClockWise(ID+1,0,number[_ID-1][_high]-8);
+	while(JudgeToGO(ID+1,number[_ID-1][_high]-8)!=1);
 	
 	ClockWise(ID,0,number[_ID-1][low]);
  	while(JudgeToGO(ID,number[_ID-1][low])!=1);
@@ -59,14 +60,15 @@ void right90(uint8_t _ID)
 	ClockWise(ID+1,0,number[_ID-1][_high]);
 	while(JudgeToGO(ID+1,number[_ID-1][_high])!=1);
 }
+
 void turn180(uint8_t _ID) 
 {
 	char ID=2*_ID-1;
 	
 	ClockWise(ID,0,number[_ID-1][med]);
 	while(JudgeToGO(ID,number[_ID-1][med])!=1);
-	ClockWise(ID+1,0,number[_ID-1][_high]-5);
-	while(JudgeToGO(ID+1,number[_ID-1][_high]-5)!=1);
+	ClockWise(ID+1,0,number[_ID-1][_high]-8);
+	while(JudgeToGO(ID+1,number[_ID-1][_high]-8)!=1);
 	
 	ClockWise(ID,0,number[_ID-1][zero]);
  	while(JudgeToGO(ID,number[_ID-1][zero])!=1);
@@ -114,38 +116,70 @@ void allleft90()               /* 整体逆时针90  */
 	Action();
 	while(JudgeToGO(6,number[2][_high])!=1);
 }
+
 void allright90()              /* 整体顺时针90  */
 {
-	REG_Write(4,0,number[1][_low]);
+//	REG_Write(4,0,number[1][_low]);
+//	REG_Write(4,0,number[1][_low]);
+//	REG_Write(8,0,number[3][_low]);
+//	Action();
+//	while(JudgeToGO(8,number[3][_low])!=1);
+//	
+//	REG_Write(1,0,number[0][high]);
+//	REG_Write(5,0,number[2][low]);
+//	Action();
+//	while(JudgeToGO(5,number[2][low])!=1);
+//	
+//	REG_Write(4,0,number[1][_high]);
+//	REG_Write(8,0,number[3][_high]);
+//	Action();
+//	while(JudgeToGO(8,number[3][_high])!=1);
+//	
+//	REG_Write(6,0,number[2][_low]);
+//	REG_Write(2,0,number[0][_low]);
+//	Action();
+//	while(JudgeToGO(2,number[0][_low])!=1);
+//	
+//	REG_Write(1,0,number[0][med]);
+//	REG_Write(5,0,number[2][med]);
+//	Action();
+//	while(JudgeToGO(5,number[2][med])!=1);
+//	
+//	REG_Write(2,0,number[0][_high]);
+//	REG_Write(6,0,number[3][_high]);
+//	Action();
+//	while(JudgeToGO(6,number[3][_high])!=1);
+
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(2,0,number[0][_low]);
+	REG_Write(6,0,number[2][_low]);
+	Action();
+	while(JudgeToGO(6,number[2][_low])!=1);
+	
+	REG_Write(1,0,number[0][low]);
+	REG_Write(5,0,number[2][high]-15);
+	Action();
+	while(JudgeToGO(5,number[2][high])!=1);
+	
+	REG_Write(2,0,number[0][_high]);
+	REG_Write(6,0,number[2][_high]-5);
+	Action();
+	while(JudgeToGO(6,number[2][_high]-5)!=1);
+
 	REG_Write(4,0,number[1][_low]);
 	REG_Write(8,0,number[3][_low]);
 	Action();
 	while(JudgeToGO(8,number[3][_low])!=1);
-	
-	REG_Write(1,0,number[0][high]);
-	REG_Write(5,0,number[2][low]);
-	Action();
-	while(JudgeToGO(5,number[2][low])!=1);
-	
-	REG_Write(4,0,number[1][_high]);
-	REG_Write(8,0,number[3][_high]);
-	Action();
-	while(JudgeToGO(8,number[3][_high])!=1);
-	
-	REG_Write(6,0,number[2][_low]);
-	REG_Write(2,0,number[0][_low]);
-	Action();
-	while(JudgeToGO(2,number[0][_low])!=1);
 	
 	REG_Write(1,0,number[0][med]);
 	REG_Write(5,0,number[2][med]);
 	Action();
 	while(JudgeToGO(5,number[2][med])!=1);
 	
-	REG_Write(2,0,number[0][_high]);
-	REG_Write(6,0,number[3][_high]);
+	REG_Write(4,0,number[1][_high]);
+	REG_Write(8,0,number[3][_high]);
 	Action();
-	while(JudgeToGO(6,number[3][_high])!=1);
+	while(JudgeToGO(8,number[3][_high])!=1);
 }
 
 
@@ -158,6 +192,7 @@ void Delayms(uint16_t time)
 		while(j--);
 	}
 }
+
 void start()
 {
 	ClockWise(1,0,number[0][med]);
@@ -177,6 +212,7 @@ void start()
 	ClockWise(6,0,number[2][_high]);
 	while(JudgeToGO(6,number[2][_high])!=1);
 }
+
 void end()
 {
 	REG_Write(1,0,number[0][med]);
@@ -191,6 +227,7 @@ void end()
 	Action();
 	while(JudgeToGO(6,number[2][_low])!=1);
 }
+
 void U()
 {
 	REG_Write(2,0,number[0][_low]);
@@ -203,6 +240,7 @@ void U()
 	Action();
 	while(JudgeToGO(7,number[3][high])!=1);
 }
+
 void D()
 {
 	REG_Write(3,0,number[1][high]);
@@ -210,6 +248,7 @@ void D()
 	Action();
 	while(JudgeToGO(7,number[3][low])!=1);
 }
+
 void L()
 {
 	REG_Write(3,0,number[1][med]);
@@ -232,9 +271,8 @@ void L()
 	REG_Write(5,0,number[2][low]);
 	Action();
 	while(JudgeToGO(5,number[2][low])!=1);
-	
-	
 }
+
 void R()
 {
 	REG_Write(1,0,number[0][low]);
@@ -242,8 +280,8 @@ void R()
 	REG_Write(5,0,number[2][high]);
 	Action();
 	while(JudgeToGO(5,number[2][high])!=1);
-
 }
+
 void B()
 {
 	REG_Write(4,0,number[1][_high]);
@@ -277,6 +315,7 @@ void B()
 	Action();
 	while(JudgeToGO(5,number[2][high])!=1);
 }
+
 void Retn()
 {
 	REG_Write(1,0,number[0][med]);
@@ -330,6 +369,7 @@ void Retn()
 	Action();
 	while(JudgeToGO(6,number[3][_high])!=1);
 }
+
 void Correction()
 {
 	REG_Write(2,0,number[0][_low]);
@@ -345,6 +385,7 @@ void Correction()
 	while(JudgeToGO(2,number[0][_high])!=1);
 	while(JudgeToGO(6,number[3][_high])!=1);
 }
+
 void rubikStep(char *step)
 {
 	u8 m=0;

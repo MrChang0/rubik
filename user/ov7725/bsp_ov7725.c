@@ -3,7 +3,6 @@
 #include "bsp_ili9341_lcd.h"
 #include "color.h"
 #include "mofang.h"
-uint16_t MidColorData[3][3];
 
 u8 area[10]={'F', 'U', 'D', 'L', 'R', 'B','0','0','1','2'};
 
@@ -376,49 +375,49 @@ void ImagDisp(void)
 //			if(j==Mid[6].x&&i>Mid[6].y&&i<=Mid[6].y+pointNum)
 //				ColorData6[3][i-Mid[6].y]=Camera_Data;
 			
-			if(i==70&&j==125)
+			if(i==65&&j==135)
 			{
 				MidColorData[0][0]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==70&&j==167)
+			if(i==65&&j==170)
 			{
 				MidColorData[0][1]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==70&&j==208)
+			if(i==65&&j==202)
 			{ 	
 				MidColorData[0][2]=Camera_Data;
 				Camera_Data=0;
 			}
 			
-			if(i==110&&j==127)
+			if(i==100&&j==135)
 			{
 				MidColorData[1][0]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==110&&j==168)
+			if(i==100&&j==170)
 			{
 				MidColorData[1][1]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==110&&j==208)
+			if(i==100&&j==202)
 			{
 				MidColorData[1][2]=Camera_Data;
 				Camera_Data=0;
 			}
 			
-			if(i==145&&j==128)
+			if(i==135&&j==135)
 			{
 				MidColorData[2][0]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==145&&j==168)
+			if(i==135&&j==170)
 			{
 				MidColorData[2][1]=Camera_Data;
 				Camera_Data=0;
 			}
-			if(i==145&&j==208)
+			if(i==135&&j==202)
 			{
 				MidColorData[2][2]=Camera_Data;
 				Camera_Data=0;

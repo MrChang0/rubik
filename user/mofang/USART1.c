@@ -1,4 +1,4 @@
-#include"USART1.h"
+#include "USART1.h"
 
 
 u8 sh[15]={0};																																//存放当前位置低位数据
@@ -81,6 +81,7 @@ void USART1_IRQHandler(void)                																	//串口1中断服务程序
 			}	
   } 
 }
+
 u8 Receiving(u8 num)																														//不知道循序会不会乱 
 {
 	u8 data=0;
@@ -101,7 +102,6 @@ void Send(uint8_t Data)
 	
 	while(USART_GetFlagStatus(USART1,USART_FLAG_TC) == RESET);
 }
-
 
 void RECEIVE_Config(void)
 {

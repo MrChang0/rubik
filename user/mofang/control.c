@@ -31,6 +31,7 @@ void Reset_Config(uint8_t ID)                   /*   ¸´Î»Ò»¸ö¶æ»ú ´Óµç»úÄ£Ê½ºóÒª
 	
 	Delayus(10000);
 }
+
 void RetnMode(uint8_t ID,u8 Mode)
 {
 	USART1_Config();
@@ -46,6 +47,7 @@ void RetnMode(uint8_t ID,u8 Mode)
 	Sum=0xFF+0xFF+ID+0x04+0x03+0x10+Mode;
 	Send(Sum);
 }
+
 void ChangeID(uint8_t ID)        /* ¸Ä±ä¶æ»úµÄID ¶Ïµç±£´æ   0<= ID <=255   */
 {
 	USART1_Config();
@@ -66,7 +68,6 @@ void ChangeID(uint8_t ID)        /* ¸Ä±ä¶æ»úµÄID ¶Ïµç±£´æ   0<= ID <=255   */
 	
 	Delayus(10000);
 }
-
 
 void Baud_Config(uint16_t ID,uint32_t baud)     /*  Ç°Áù¸ö²¨ÌØÂÊ¶Ïµç±£´æ   */
 {
@@ -103,7 +104,6 @@ void Baud_Config(uint16_t ID,uint32_t baud)     /*  Ç°Áù¸ö²¨ÌØÂÊ¶Ïµç±£´æ   */
 	Delayus(10000);	
 }
 
-
 void ClockWise(uint16_t ID,uint16_t speed,uint16_t angle)      /* ¶æ»úÄ£Ê½  0<= speed<= 100 0<= angle<=1023   */
 { 
 	uint16_t buf2,buf1;
@@ -114,7 +114,6 @@ void ClockWise(uint16_t ID,uint16_t speed,uint16_t angle)      /* ¶æ»úÄ£Ê½  0<= 
 	buf2=angle;
 	angle_H=(u8)(buf2>>8);
 	angle_L=(u8)buf2;
-	
 	
  	USART1_Config();
 	Delayus(10000);
@@ -135,6 +134,7 @@ void ClockWise(uint16_t ID,uint16_t speed,uint16_t angle)      /* ¶æ»úÄ£Ê½  0<= 
 	
 	Delayus(10000);
 }
+
 void Dynamo_Config(uint16_t ID,uint16_t speed)           //×î¸ß×ªËÙ
 {
 	speed_H=(u8)(speed>>8);
@@ -154,7 +154,7 @@ void Dynamo_Config(uint16_t ID,uint16_t speed)           //×î¸ß×ªËÙ
 	Send(0);		
 	Sum=~(ID+0x07+0x09);
 	Send(Sum);
- RECEIVE_Config();
+	RECEIVE_Config();
 	
 	Delayus(10000);
 
@@ -199,9 +199,9 @@ void REG_Write(uint8_t ID,uint16_t speed,uint16_t angle)   //Í¬Ê±Æô¶¯   ÅäÖÃÔËÐÐ
 	Sum=~(ID+0x07+0x04+0x1E +angle_H+angle_L+speed_L+speed_H);
 	Send(Sum);
 	
-	
 	RECEIVE_Config();
 }
+
 void Action()                 //Æô¶¯REG_Writeº¯Êý 
 {
 	USART1_Config();
@@ -215,6 +215,7 @@ void Action()                 //Æô¶¯REG_Writeº¯Êý
 	
 	RECEIVE_Config();
 }
+
 void DianJi(uint8_t ID)                         //µç»úÄ£Ê½´ò¿ª 
 {
 	USART1_Config();
@@ -234,6 +235,7 @@ void DianJi(uint8_t ID)                         //µç»úÄ£Ê½´ò¿ª
 	RECEIVE_Config();
 	Delayus(100);
 }
+
 void DuoJi(uint8_t ID)                         //¶æ»úÄ£Ê½´ò¿ª 
 {
 	USART1_Config();
@@ -253,6 +255,7 @@ void DuoJi(uint8_t ID)                         //¶æ»úÄ£Ê½´ò¿ª
 	RECEIVE_Config();
 	Delayus(100);
 }
+
 void speedtest(uint8_t ID,uint8_t ch,uint16_t speed)     //IDÑ¡È¡¶æ»úID   chÈ¡0»ò1  ÊÇ×ª·½Ïò  speed ËÙ¶È  < 1023   
 {
 	uint8_t speed_H,speed_L;
@@ -280,8 +283,8 @@ void speedtest(uint8_t ID,uint8_t ch,uint16_t speed)     //IDÑ¡È¡¶æ»úID   chÈ¡0»
 	Send(Sum);
 	
 	RECEIVE_Config();
-	
 }
+
 u8 read_current_location(uint16_t ID,u8 address)																												
 {
 	int num=0;
@@ -307,6 +310,7 @@ u8 read_current_location(uint16_t ID,u8 address)
 	
 	return Receiving(num);																										//·µ»Øµ±Ç°½Ç °Ñ0~1023µÄÊý¾Ý×ª»»³É0~300
 }
+
 u16 read_location(u8 ID)
 {
 	u8 i=0,j=0;
@@ -337,6 +341,7 @@ u16 read_location(u8 ID)
 			}
 	return a[4];
 }
+
 void Delayus(uint32_t time)
 {
 	uint32_t i;
